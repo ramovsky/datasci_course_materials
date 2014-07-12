@@ -1,17 +1,21 @@
 import sys
+import json
 
-def hw():
-    print 'Hello, world!'
-
-def lines(fp):
-    print str(len(fp.readlines()))
 
 def main():
-    sent_file = open(sys.argv[1])
-    tweet_file = open(sys.argv[2])
-    hw()
-    lines(sent_file)
-    lines(tweet_file)
+    with open(sys.argv[1]) as f:
+        sents = {}
+        for line in f:
+            word, score = line.split('\t')
+            sents[word] = int(score)
+
+    with open(sys.argv[2]) as f:
+        for line in f:
+            data = json.loads(line)
+            text = data.get('text', '')
+            score = sum(sents.get(w, 0) for w in text.split())
+            print(score)
+
 
 if __name__ == '__main__':
     main()
