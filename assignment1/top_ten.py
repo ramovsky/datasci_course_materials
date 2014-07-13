@@ -1,17 +1,17 @@
 import sys
 import json
-from collections import Counter
+from collections import defaultdict
 
 
 def main():
-    c = Counter()
+    c = defaultdict(int)
     with open(sys.argv[1]) as f:
         for line in f:
             data = json.loads(line)
             try:
                 tags = data['entities']['hashtags']
                 for obj in tags:
-                    c += Counter({obj['text']: 1})
+                    c[obj['text']] += 1
             except KeyError:
                 pass
 
